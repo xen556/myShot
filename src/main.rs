@@ -1,18 +1,19 @@
 use clap::Parser;
+mod xcap;
 
 fn main() {
     let args = Args::parse();
 
-    println!("Name: {}", args.name);
-    println!("Fullscreen: {}", args.fullscreen);
-    println!("Area: {}", args.area);
+    if args.fullscreen {
+        xcap::fullscreen_shot();
+    }
+    else {
+        println!("Invalid flag")
+    }
 }
 
 #[derive(Parser)]
-#[command(name = "MyShot Tool")]
 struct Args {
-    name: String,
-
     #[arg(long)]
     area: bool,
 
