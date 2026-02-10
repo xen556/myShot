@@ -7,6 +7,9 @@ fn main() {
     if args.fullscreen {
         xcap::fullscreen_shot();
     }
+    else if args.area {
+        xcap::region_screenshot();
+    }
     else {
         println!("Invalid flag")
     }
