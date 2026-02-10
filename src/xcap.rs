@@ -4,6 +4,8 @@ use ::xcap::Monitor;
 use chrono::Local;
 use std::process::Command;
 use std::path::Path;
+use arboard::Clipboard;
+use image::ImageReader;
 
 fn monitor_data() -> (Monitor, (u32, u32)) {
 
@@ -20,7 +22,7 @@ fn monitor_data() -> (Monitor, (u32, u32)) {
 
 pub fn fullscreen_shot() {
     let date = Local::now();
-    let datetime = date.format("%Y-%m-%d %H:%M:%S").to_string();
+    let datetime = date.format("%Y-%m-%d_%H-%M-%S").to_string();
 
     let (monitor, (w, h)) = monitor_data();
 
@@ -37,7 +39,7 @@ pub fn fullscreen_shot() {
     file_path.push(filename);
 
     image.save(&file_path).unwrap();
-    clipboard_copy(&file_path);
+    clipboard(&file_path);
     println!("Screenshot saved to: {}", file_path.display());
     println!("Screenshot copied to clipboard");
 
@@ -78,17 +80,21 @@ pub fn region_screenshot() {
     file_path.push(filename);
 
     image.save(&file_path).unwrap();
-    clipboard_copy(&file_path);
+    clipboard(&file_path);
     println!("Screenshot saved to: {}", file_path.display());
     println!("Screenshot copied to clipboard");
 }
 
-pub fn clipboard_copy(file_path: &Path) {
-    Command::new("wl-copy")
-                                .args(["--type", "image/png"])
-                                .stdin(std::process::Stdio::from(
-                                    std::fs::File::open(file_path).unwrap(),
-                                ))
-                                .spawn()
-                                .expect("error wl-copy");
+pub fn clipboard(file_path: &Path) {
+    let img = ImageReader::open(file_path).expect("Failed to open image").decode().expect("Failed to decode image");
+
+    let rgba = img.to_rgba8();
+    let (width, height) = rgba.dimensions();
+
+    let mut copy = Clipboard::new().expect("Failed to open clipboard");
+    copy.set_image(arboard::ImageData {
+        width: width as usize,
+        height: height as usize,
+        bytes: std::borrow::Cow::Borrowed(&rgba),
+    }).expect("Failed to copy image to clipboard");
 }
