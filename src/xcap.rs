@@ -2,10 +2,10 @@ use fs_extra::dir;
 use std::path::PathBuf;
 use ::xcap::Monitor;
 use chrono::Local;
-use std::process::Command;
 use std::path::Path;
 use arboard::Clipboard;
 use image::ImageReader;
+use crate::region_selector::background;
 
 fn monitor_data() -> (Monitor, (u32, u32)) {
 
@@ -54,22 +54,22 @@ pub fn region_screenshot() {
     dir_path.push("Pictures/Screenshots");
     dir::create_all(&dir_path, false).unwrap();
 
-    let output = Command::new("slurp").output().expect("Error slurp");
 
-    let slurp_out = String::from_utf8(output.stdout).unwrap();
-    let slurp_out = slurp_out.trim();
+    // SLURP
+    //let output = Command::new("slurp").output().expect("Error slurp");
+    //let slurp_out = String::from_utf8(output.stdout).unwrap();
+    //let slurp_out = slurp_out.trim();
+    //let mut parts = slurp_out.split_whitespace();
+    //let pos = parts.next().unwrap();
+    //let size = parts.next().unwrap();
+    //let mut pos_it = pos.split(",");
+    //let x = pos_it.next().unwrap().parse().unwrap();
+    //let y = pos_it.next().unwrap().parse().unwrap();
+    //let mut size_it = size.split("x");
+    //let width = size_it.next().unwrap().parse().unwrap();
+    //let height = size_it.next().unwrap().parse().unwrap();
 
-    let mut parts = slurp_out.split_whitespace();
-    let pos = parts.next().unwrap();
-    let size = parts.next().unwrap();
-
-    let mut pos_it = pos.split(",");
-    let x = pos_it.next().unwrap().parse().unwrap();
-    let y = pos_it.next().unwrap().parse().unwrap();
-    
-    let mut size_it = size.split("x");
-    let width = size_it.next().unwrap().parse().unwrap();
-    let height = size_it.next().unwrap().parse().unwrap();
+    let (x, y, width, height) = background().unwrap();
 
     let image = monitor
                                                     .capture_region(x, y, width, height)

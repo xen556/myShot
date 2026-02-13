@@ -11,9 +11,6 @@ fn main() {
     else if args.area {
         xcap::region_screenshot();
     }
-    else if args.test {
-        region_selector::test();
-    }
     else {
         println!("Invalid flag")
     }

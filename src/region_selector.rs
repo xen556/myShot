@@ -89,12 +89,3 @@ impl App for RegionApp {
             });
     }
 }
-
-pub fn test() {
-    let result = background();
-    if let Some((x, y, width, height)) = result {
-        println!("x: {}, y: {}, width: {}, height: {}", x, y, width, height);
-    } else {
-        println!("Nie zaznaczono obszaru");
-    }
-}
