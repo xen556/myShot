@@ -22,8 +22,6 @@ pub fn select_region() -> (u32, u32, u32, u32) {
 
 #[cfg(any(target_os = "windows", target_os = "macos"))]
 pub fn select_region() -> (u32, u32, u32, u32) {
-    // TODO: tu można w przyszłości zrobić transparent overlay z egui/winit
-    // Na razie zwracamy full screen jako placeholder
     let width = 1920;
     let height = 1080;
     let x = 0;
