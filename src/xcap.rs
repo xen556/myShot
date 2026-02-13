@@ -5,7 +5,7 @@ use chrono::Local;
 use std::path::Path;
 use arboard::Clipboard;
 use image::ImageReader;
-use std::process::Command;
+use crate::region::select_region;
 
 fn monitor_data() -> (Monitor, (u32, u32)) {
 
@@ -46,31 +46,19 @@ pub fn fullscreen_shot() {
 }
 
 pub fn region_screenshot() {
-    let (monitor,(_w,_h)) = monitor_data();
+    let (monitor, (_w,_h)) = monitor_data();
     let date = Local::now();
-    let datetime = date.format("%Y-%m-%d %H:%M:%S").to_string();
+    let datetime = date.format("%Y-%m-%d_%H-%M-%S").to_string();
 
     let mut dir_path = dirs::home_dir().unwrap_or(PathBuf::from("."));
     dir_path.push("Pictures/Screenshots");
     dir::create_all(&dir_path, false).unwrap();
 
-
-    let output = Command::new("slurp").output().expect("Error slurp");
-    let slurp_out = String::from_utf8(output.stdout).unwrap();
-    let slurp_out = slurp_out.trim();
-    let mut parts = slurp_out.split_whitespace();
-    let pos = parts.next().unwrap();
-    let size = parts.next().unwrap();
-    let mut pos_it = pos.split(",");
-    let x = pos_it.next().unwrap().parse().unwrap();
-    let y = pos_it.next().unwrap().parse().unwrap();
-    let mut size_it = size.split("x");
-    let width = size_it.next().unwrap().parse().unwrap();
-    let height = size_it.next().unwrap().parse().unwrap();
+    let (x, y, width, height) = select_region();
 
     let image = monitor
-                                                    .capture_region(x, y, width, height)
-                                                    .expect("Error");
+        .capture_region(x, y, width, height)
+        .expect("Error capturing region");
 
     let filename = format!("screenshot_{}.png", datetime);
     let mut file_path = dir_path;

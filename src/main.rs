@@ -1,16 +1,15 @@
 use clap::Parser;
 mod xcap;
+mod region;
 
 fn main() {
     let args = Args::parse();
 
     if args.fullscreen {
         xcap::fullscreen_shot();
-    }
-    else if args.area {
+    } else if args.area {
         xcap::region_screenshot();
-    }
-    else {
+    } else {
         println!("Invalid flag")
     }
 }
