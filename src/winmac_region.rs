@@ -16,6 +16,8 @@ impl ApplicationHandler for App {
         let window_attributes = WindowAttributes::default()
             .with_decorations(false)
             .with_blur(false)
+            .with_transparent(true)
+            .with_active(true)
             .with_fullscreen(Some(winit::window::Fullscreen::Borderless(None)));
 
         let window = event_loop
@@ -23,6 +25,17 @@ impl ApplicationHandler for App {
             .unwrap();
 
         self.window = Some(window);
+        #[cfg(target_os = "windows")]
+        {
+            use winit::platform::windows::WindowExtWindows;
+            use winapi::um::winuser::{SetWindowLongW, GetWindowLongW, GWL_EXSTYLE, WS_EX_TOOLWINDOW};
+
+            let hwnd = window.hwnd() as *mut _;
+            unsafe {
+                let ex_style = GetWindowLongW(hwnd, GWL_EXSTYLE);
+                SetWindowLongW(hwnd, GWL_EXSTYLE, ex_style | WS_EX_TOOLWINDOW as i32);
+            }
+        }
     }
 
     fn window_event(

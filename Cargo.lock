@@ -2576,6 +2576,7 @@ dependencies = [
  "fs_extra",
  "image",
  "rdev",
+ "winapi",
  "winit",
  "xcap",
 ]
