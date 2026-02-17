@@ -64,7 +64,7 @@ Options:
   -h, --help        Print help information
 ```
 
-### Examples
+## Examples
 
 Capture a specific area:
 
@@ -79,3 +79,6 @@ Capture the full screen:
 ```
 
 ---
+
+## Notes 
+* Screenshots are saved to `~/Pictures/Screenshots` by default.
