@@ -32,7 +32,7 @@ Download the precompiled binary and place it in a directory in your `PATH`, or r
 
 --- 
 
-Install `slurp` on common Linux systems:
+Install `slurp and wl-clipboard` on common Linux systems:
 
 ```bash
 # Debian/Ubuntu
